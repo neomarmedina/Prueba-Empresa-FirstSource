@@ -1,51 +1,30 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+Documentacion del procedimiento realizado en esta Api cliente :
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+	1)Se crearon las rutas que nos redirecciona al controladoR PostsController y este a las distintas vistas
 
-## About Laravel
+	2)Se creo el controlador PostsController, que se encarga de obtener los post y para ellos los metodos 	
+		index()
+		show()
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+	3)Tambien se creo la Post la cual se encarga de definir las rutas para obtener los posts, usando sus metodos internos all() y find() que usa el metodo get que se hereda de la clase GuzzleHttpRequest donde se interactua direcamente con la libreria GuzzleHttp
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+	4) Se creo la clase GuzzleHttpRequest que es la encargada de interactuar con la libreria GuzzleHttp para consumir (conectarse) con otras apis (Backend).
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
+		En esta clase se crea un constructor dond ese inyecta el cliente de GuzzleHttp, laravel busca en su contenedor si tiene una llave con eñl nombre de GuzzleHttp\Client y va a la clase AppServiceProvider.php y nos va a devolver lo siguiente :
 
-## Learning Laravel
 
-Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is thorough, complete, and makes it a breeze to get started learning the framework.
+		$this->app->singleton('GuzzleHttp\Client', function(){
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 900 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+            return new Client([
+                
+                'base_uri' => 'https://jsonplaceholder.typicode.com/',
+                 
+            ]);
+        });
 
-## Laravel Sponsors
+		o sea la conexion con la api correspondiente a la url que le pasamos
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](http://patreon.com/taylorotwell):
 
-- **[Vehikl](http://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Styde](https://styde.net)**
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
+	5)Tambien se creo en la clase AppServiceProvider.php el metodo register() que contiene la conexion usando GuzzleHttp explicada en el paso anterior, esto con la idea de tener bien estructurado nuestra aplicacion 
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+6)Por ultimo se crearon todas las vistas necesarias para mostrar la informacion retornada por la api externa de prueba
